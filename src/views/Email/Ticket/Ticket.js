@@ -5,10 +5,12 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { useEffect, useState } from "react";
-import { MDBDataTable } from 'mdbreact';
+import DataTable from 'react-data-table-component';
 
 const Ticket = () => {
+  const [search, setSearch] = useState("")
   const [content, setContent] = useState([])
+  const [filltersearch, setFillterSearch] = useState([])
 
   const fetchData = () => {
     fetch("http://18.143.65.168:4040/ticket/ticketsWithPagination?page=0&size=10")
@@ -18,54 +20,52 @@ const Ticket = () => {
       .then(data => {
         console.log(data.content)
         setContent(data.content)
+        setFillterSearch(data.content)
 
       })
   }
 
+  const columns = [
+    {
+      name: "Ticket No",
+      selector: (row) => row.ticketNo,
+    },
+    {
+      name: "Subject",
+      selector: (row) => row.subject,
+    },
+    {
+      name: "Email Address",
+      selector: (row) => row.fromAddress,
+    },
+    {
+      name: "Time Stamp",
+      selector: (row) => row.timestamp,
+    },
+    {
+      name: "Status",
+      selector: (row) => row.status,
+    },
+    {
+      name: "Agent",
+      selector: (row) => row.agent
+    },
+  ]
   useEffect(() => {
     fetchData()
   }, [])
-  const data = () => {
-    return(
-      <div>
-        <table>
-      <thead>
-        <tr>
-          <th scope="col">TicketNo</th>
-          <th scope="col">Subject</th>
-          <th scope="col">Email Address</th>
-          <th scope="col">Time Stamp</th>
-          <th scope="col">Status</th>
-          <th scope="col">Agent</th>
-        </tr>
-      </thead>
-      <tbody>
-        {content && content.map(content => {
-          return (
-            <tr>
-              <th scope="row" key={content.ticketNo}>{content.ticketNo}</th>
-              <td key={content.subject}>{content.subject}</td>
-              <td key={content.fromAddress}>{content.fromAddress}</td>
-              <td key={content.timestamp}>{content.timestamp}</td>
-              <td key={content.status}>{content.status}</td>
-              <td key={content.agent}>{content.agent}</td>
-            </tr>
-          );
 
-        })}
-      </tbody>
-    </table>
-      </div>
-    )
-  }
+  useEffect(() => {
+    const result = content.filter(content => {
+      return content.subject.toLowerCase().match(search.toLowerCase());
+    })
+    setFillterSearch(result)
+  }, [search]);
   return (
-      <MDBDataTable
-      striped
-      bordered
-      small
-      data={data()}
-      />
+    <div>
 
+      <DataTable title="Tickets" columns={columns} data={filltersearch} pagination fixedHeader fixedHeaderScrollHeight='400px' highlightOnHover subHeader subHeaderComponent={<input type="text" placeholder='Search here' className="w-25 form-control" value={search} onChange={(e) => setSearch(e.target.value)}/>}/>
+    </div>
   )
 
 }

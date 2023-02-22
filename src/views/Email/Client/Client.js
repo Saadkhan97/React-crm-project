@@ -5,7 +5,7 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { useEffect, useState } from "react";
-// import { MDBDataTable } from 'mdbreact';
+import DataTable from 'react-data-table-component';
 
 const Client = () => {
   const [emailListList, setEmailListList] = useState([])
@@ -22,33 +22,54 @@ const Client = () => {
       })
   }
 
+  const columns =[
+    {
+      name: "Email ID",
+      selector: (row) => row.emailID,
+    },
+    {
+      name: "Name",
+      selector: (row) => row.name,
+    },
+    {
+      name: "Email Address",
+      selector: (row) => row.address,
+    },
+  ]
   useEffect(() => {
     fetchData()
   }, [])
   return (
-    <div>
-    <table className="table table-striped table-dark">
-      <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Name</th>
-          <th scope="col">Email Address</th>
-        </tr>
-      </thead>
-      <tbody>
-        {emailListList && emailListList.map(emailListList => {
-          return (
-            <tr>
-              <th scope="row" key={emailListList.emailID}>{emailListList.emailID}</th>
-              <td key={emailListList.name}>{emailListList.name}</td>
-              <td key={emailListList.address}>{emailListList.address}</td>
-            </tr>
-          );
-
-        })}
-      </tbody>
-    </table>
-  </div>
+    // <div>
+    //     <table className="table table-striped table-dark">
+    //   <thead>
+    //     <tr>
+    //       <th scope="col">TicketNo</th>
+    //       <th scope="col">Subject</th>
+    //       <th scope="col">Email Address</th>
+    //       <th scope="col">Time Stamp</th>
+    //       <th scope="col">Status</th>
+    //       <th scope="col">Agent</th>
+    //     </tr>
+    //   </thead>
+    //   <tbody>
+    //     {content && content.map(content => {
+    //       return (
+    //         <tr>
+    //           <th scope="row" key={content.ticketNo}>{content.ticketNo}</th>
+    //           <td key={content.subject}>{content.subject}</td>
+    //           <td key={content.fromAddress}>{content.fromAddress}</td>
+    //           <td key={content.timestamp}>{content.timestamp}</td>
+    //           <td key={content.status}>{content.status}</td>
+    //           <td key={content.agent}>{content.agent}</td>
+    //         </tr>
+    //       );
+ 
+    //     })}
+    //   </tbody>
+    // </table>
+    //   </div>
+    <DataTable columns={columns} data={emailListList} pagination fixedHeader fixedHeaderScrollHeight='400px'/>
   )
 
 }

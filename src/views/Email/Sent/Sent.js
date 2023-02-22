@@ -5,10 +5,12 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { useEffect, useState } from "react";
-// import { MDBDataTable } from 'mdbreact';
+import DataTable from 'react-data-table-component';
 
-const Sent= () => {
+const Sent = () => {
+  const [search, setSearch] = useState("")
   const [content, setContent] = useState([])
+  const [filltersearch, setFillterSearch] = useState([])
 
   const fetchData = () => {
     fetch("http://18.143.65.168:4040/email/emailsWithPagination/1?page=0&size=10")
@@ -18,39 +20,44 @@ const Sent= () => {
       .then(data => {
         console.log(data.content)
         setContent(data.content)
+        setFillterSearch(data.content)
 
       })
   }
 
+  const columns =[
+    {
+      name: "Code",
+      selector: (row) => row.code,
+    },
+    {
+      name: "Subject",
+      selector: (row) => row.subject,
+    },
+    {
+      name: "Email Address",
+      selector: (row) => row.fromAddress,
+    },
+    {
+      name: "Time Stamp",
+      selector: (row) => row.timestamp,
+    },
+  ]
   useEffect(() => {
     fetchData()
   }, [])
+
+  useEffect(() => {
+    const result = content.filter(content => {
+      return content.subject.toLowerCase().match(search.toLowerCase());
+    })
+    setFillterSearch(result)
+  }, [search]);
   return (
     <div>
-    <table className="table table-striped table-dark">
-      <thead>
-        <tr>
-          <th scope="col">Code</th>
-          <th scope="col">Subject</th>
-          <th scope="col">Email Address</th>
-          <th scope="col">Time Stamp</th>
-        </tr>
-      </thead>
-      <tbody>
-        {content && content.map(content => {
-          return (
-            <tr>
-              <th scope="row" key={content.code}>{content.code}</th>
-              <td key={content.subject}>{content.subject}</td>
-              <td key={content.fromAddress}>{content.fromAddress}</td>
-              <td key={content.timestamp}>{content.timestamp}</td>
-            </tr>
-          );
 
-        })}
-      </tbody>
-    </table>
-  </div>
+      <DataTable columns={columns} data={filltersearch} pagination fixedHeader fixedHeaderScrollHeight='400px' highlightOnHover subHeader subHeaderComponent={<input type="text" placeholder='Search here' className="w-25 form-control" value={search} onChange={(e) => setSearch(e.target.value)}/>}/>
+    </div>
   )
 
 }
