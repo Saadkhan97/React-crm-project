@@ -1,0 +1,10 @@
+.sign-up-card{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-sign-up{
+    background-color: #000034;
+    border-color: white;
+}

@@ -6,7 +6,7 @@ import {
   cilStar,
   cilEnvelopeOpen,
 } from '@coreui/icons'
-import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import { CNavGroup, CNavItem } from '@coreui/react'
 
 const _nav = [
   {

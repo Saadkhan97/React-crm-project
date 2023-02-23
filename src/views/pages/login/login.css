@@ -1,0 +1,11 @@
+.background{
+    background: rgb(2,0,36);
+    background: linear-gradient(280deg, rgba(2,0,36,1) 0%, rgba(16,19,50,1) 42%, rgba(126,130,171,1) 100%, rgba(169,204,212,1) 100%);
+}
+
+.btn-login{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #000034;
+}
