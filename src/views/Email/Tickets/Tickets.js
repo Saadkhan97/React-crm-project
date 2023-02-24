@@ -1,13 +1,16 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable no-template-curly-in-string */
+/* eslint-disable prettier/prettier */
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/jsx-key */
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 
-const Ticket = () => {
+const Tickets = () => {
   const [search, setSearch] = useState("")
   const [content, setContent] = useState([])
   const [filltersearch, setFillterSearch] = useState([])
@@ -63,11 +66,17 @@ const Ticket = () => {
   }, [search]);
   return (
     <div>
-
-      <DataTable title="Tickets" columns={columns} data={filltersearch} pagination fixedHeader fixedHeaderScrollHeight='400px' highlightOnHover subHeader subHeaderComponent={<input type="text" placeholder='Search here' className="w-25 form-control" value={search} onChange={(e) => setSearch(e.target.value)}/>}/>
+      {content.map((content) => {
+        return(
+          <div key={content.ticketNo}>
+             <Link to={`Ticket/${content.ticketNo}`} style={{ textDecoration: 'none' }}><DataTable title="Tickets" columns={columns} data={filltersearch} pagination fixedHeader fixedHeaderScrollHeight='400px' highlightOnHover subHeader subHeaderComponent={<input type="text" placeholder='Search here' className="w-25 form-control" value={search} onChange={(e) => setSearch(e.target.value)}/>}/></Link>
+          </div>
+        )
+      })}
+     
     </div>
   )
 
 }
 
-export default Ticket;
+export default Tickets;
